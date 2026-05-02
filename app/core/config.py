@@ -12,10 +12,6 @@ API_V1_STR = "/api/v1"
 CORS_ORIGINS: list[str] = ["*"]
 MAX_INPUT_CHARS = 4000
 
-CURSOR_AGENT_TIMEOUT_SEC = 180.0
-CURSOR_AGENT_MODEL: str | None = None
-CURSOR_AGENT_MODE = "plan"
-
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -27,6 +23,10 @@ class Settings(BaseSettings):
     CURSOR_AGENT_WORKSPACE: Path = Field(default=_PROJECT_ROOT)
     CURSOR_AGENT_PATH: str | None = None
     CURSOR_API_KEY: str | None = None
+    # ask = one-shot Q&A (default, faster). plan = read-only planning (slower).
+    CURSOR_AGENT_MODE: str = Field(default="ask")
+    CURSOR_AGENT_TIMEOUT_SEC: float = Field(default=90.0)
+    CURSOR_AGENT_MODEL: str | None = Field(default=None)
 
 
 @lru_cache

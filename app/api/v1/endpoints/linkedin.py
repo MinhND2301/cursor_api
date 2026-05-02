@@ -19,6 +19,8 @@ async def convert(
     svc: Annotated[LinkedInRewriteService, Depends(get_linkedin_service)],
 ) -> ConvertResponse:
     raw = body.text.strip()
+    if not raw:
+        raise HTTPException(status_code=400, detail="Text cannot be empty or whitespace-only.")
     if len(raw) > MAX_INPUT_CHARS:
         raise HTTPException(
             status_code=400,

@@ -37,7 +37,7 @@ def run_agent_print(
     workspace: Path,
     timeout_sec: float,
     model: str | None = None,
-    mode: str = "plan",
+    mode: str = "ask",
 ) -> str:
     exe = resolve_agent_executable()
     cmd: list[str] = [
@@ -100,30 +100,3 @@ def run_agent_print(
         raise AgentCliError("Agent result missing or empty.")
 
     return result.strip()
-
-
-def _linkedin_prompt(casual: str) -> str:
-    payload = json.dumps({"casual": casual.strip()}, ensure_ascii=False)
-    return (
-        f"{payload} The object has a field `casual`. Rewrite that text as one polished, "
-        "professional LinkedIn-style sentence. Preserve intent and facts. Do not add hashtags "
-        "unless `casual` already contains them. Reply with only the rewritten sentence — one line, "
-        "no quotes, labels, or explanation."
-    )
-
-
-def casual_to_linkedin_sentence(
-    casual: str,
-    *,
-    workspace: Path,
-    timeout_sec: float,
-    model: str | None,
-    agent_mode: str = "plan",
-) -> str:
-    return run_agent_print(
-        _linkedin_prompt(casual),
-        workspace=workspace,
-        timeout_sec=timeout_sec,
-        model=model,
-        mode=agent_mode,
-    )

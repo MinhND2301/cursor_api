@@ -8,3 +8,15 @@ services:
     environment:
       CURSOR_AGENT_WORKSPACE: /app
     restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    depends_on:
+      - api
+    restart: unless-stopped

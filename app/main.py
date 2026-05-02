@@ -24,7 +24,6 @@ async def lifespan(_app: FastAPI):
 
 
 def create_app() -> FastAPI:
-    settings = get_settings()
     app = FastAPI(
         title="LinkedIn tone (Cursor Agent)",
         version="0.2.0",

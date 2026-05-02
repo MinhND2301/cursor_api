@@ -19,7 +19,8 @@ This skill applies to the **cursor_api** project: FastAPI app under `app/`, Dock
 - `app/api/v1/` — routers and endpoints (`health`, `linkedin`)
 - `app/core/config.py` — `Settings`, `API_V1_STR`, limits, CORS list
 - `app/services/linkedin_rewrite_service.py` — business logic
-- `app/integrations/cursor_agent_cli.py` — CLI / subprocess boundary
+- `app/prompts/` — file-backed agent instructions (e.g. `linkedin_rewrite.txt`)
+- `app/integrations/cursor_agent_cli.py` — CLI / subprocess boundary only (`run_agent_print`)
 - `app/schemas/` — Pydantic request/response models
 - `app/api/dependencies.py` — FastAPI `Depends` wiring
 
