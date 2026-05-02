@@ -16,4 +16,4 @@ services:
       - key: CURSOR_AGENT_WORKSPACE
         value: /app
       - key: CORS_ORIGINS
-        value: https://your-vercel-app.vercel.app,http://localhost:5173
+        value: https://linkedin-rewrite.vercel.app,https://linkedin-translator-app.vercel.app,http://localhost:5173
