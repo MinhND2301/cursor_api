@@ -73,6 +73,42 @@ Services:
 - Backend API: [http://localhost:8000](http://localhost:8000)
 - Swagger docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
+## Deploy (Render API + Vercel Frontend)
+
+Use Render free tier for backend and Vercel for frontend.
+
+### 1) Deploy backend API on Render
+
+The repo includes a [render.yaml](render.yaml) Blueprint for `linkedin-rewriter-api` only.
+
+1. Push this repo to GitHub (`MinhND2301/cursor_api`).
+2. Open [dashboard.render.com](https://dashboard.render.com) → **New** → **Blueprint** → connect repo.
+3. Apply the Blueprint to create `linkedin-rewriter-api`.
+4. Set `CURSOR_API_KEY` in Render service environment.
+5. After deploy finishes, copy API URL like `https://linkedin-rewriter-api.onrender.com`.
+
+### 2) Deploy frontend on Vercel
+
+The frontend has [frontend/vercel.json](frontend/vercel.json) for Vite static build.
+
+1. Import repo in [vercel.com](https://vercel.com/new).
+2. Set **Root Directory** to `frontend`.
+3. Add environment variable `VITE_API_BASE_URL` = your Render API URL from step 1.
+4. Deploy.
+
+### 3) Allow Vercel domain in backend CORS
+
+In Render API environment, set:
+
+`CORS_ORIGINS=https://your-vercel-app.vercel.app,http://localhost:5173`
+
+Redeploy API after changing this value.
+
+### Free tier notes
+
+- Render free Web Service sleeps after inactivity (cold starts are expected).
+- Render free request timeout is 100s; backend default is 90s.
+
 ## Run Locally (without Docker)
 
 Use two terminals.

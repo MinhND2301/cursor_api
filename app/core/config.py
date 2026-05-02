@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from pathlib import Path
 
@@ -9,7 +10,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 API_V1_STR = "/api/v1"
-CORS_ORIGINS: list[str] = ["*"]
+CORS_ORIGINS: list[str] = [
+    o.strip() for o in os.getenv("CORS_ORIGINS", "*").split(",") if o.strip()
+]
 MAX_INPUT_CHARS = 4000
 
 

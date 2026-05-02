@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: linkedin-rewriter-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: CURSOR_API_KEY
+        sync: false
+      - key: CURSOR_AGENT_MODE
+        value: ask
+      - key: CURSOR_AGENT_TIMEOUT_SEC
+        value: "90"
+      - key: CURSOR_AGENT_WORKSPACE
+        value: /app
+      - key: CORS_ORIGINS
+        value: https://your-vercel-app.vercel.app,http://localhost:5173
