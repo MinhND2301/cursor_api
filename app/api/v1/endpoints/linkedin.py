@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.api.dependencies import get_linkedin_service
 from app.core.config import MAX_INPUT_CHARS
 from app.integrations.cursor_agent_cli import AgentCliError
+from app.integrations.gemini import gemini_rewrite
 from app.schemas.linkedin import ConvertRequest, ConvertResponse
 from app.services.linkedin_rewrite_service import LinkedInRewriteService
 
@@ -26,14 +27,21 @@ async def convert(
             status_code=400,
             detail=f"Input too long (max {MAX_INPUT_CHARS} characters).",
         )
-    try:
-        linkedin = await svc.rewrite(raw)
-    except AgentCliError as e:
-        detail = str(e)
-        if e.stderr:
-            detail = f"{detail} ({e.stderr[:500]})"
-        raise HTTPException(status_code=502, detail=detail) from e
-    except TimeoutError:
-        raise HTTPException(status_code=504, detail="Cursor Agent timed out.") from None
+
+    if body.gemini_api_key and body.gemini_api_key.strip():
+        try:
+            linkedin = await gemini_rewrite(body.gemini_api_key.strip(), raw)
+        except Exception as e:
+            raise HTTPException(status_code=502, detail=f"Gemini error: {e}") from e
+    else:
+        try:
+            linkedin = await svc.rewrite(raw)
+        except AgentCliError as e:
+            detail = str(e)
+            if e.stderr:
+                detail = f"{detail} ({e.stderr[:500]})"
+            raise HTTPException(status_code=502, detail=detail) from e
+        except TimeoutError:
+            raise HTTPException(status_code=504, detail="Cursor Agent timed out.") from None
 
     return ConvertResponse(linkedin_text=linkedin)
